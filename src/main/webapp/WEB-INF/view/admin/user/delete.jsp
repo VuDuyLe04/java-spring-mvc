@@ -7,7 +7,7 @@
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Update user ${id}</title>
+                <title>Delete Users ${id}</title>
                 <!-- Latest compiled and minified CSS -->
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -24,33 +24,23 @@
                 <div class="container mt-5">
                     <div class="row">
                         <div class="col-md-6 col-12 mx-auto">
-                            <h3>Update</h3>
+                            <div class="d-flex justify-content-between">
+                                <h3>Delete the user with id = ${id}</h3>
+                            </div>
+
                             <hr />
-                            <form:form method="post" action="/admin/user/update" modelAttribute="newUser">
+                            <div class="alert alert-warning" role="alert">
+                                Are you sure to delete this user?
+                            </div>
+                            <form:form method="post" action="/admin/user/delete" modelAttribute="newUser">
                                 <div class="mb-3" style="display: none;">
                                     <label class=" form-label">Id:</label>
                                     <form:input type="text" class="form-control" path="id" value="${id}"
                                         readonly="true" />
                                 </div>
-                                <div class="mb-3">
-                                    <label class=" form-label">Email:</label>
-                                    <form:input type="text" class="form-control" path="email" readonly="true" />
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Phone number:</label>
-                                    <form:input type="text" class="form-control" path="phone" />
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Full Name:</label>
-                                    <form:input type="text" class="form-control" path="fullName" />
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Address:</label>
-                                    <form:input type="text" class="form-control" path="address" />
-                                </div>
-
-                                <button type="submit" class="btn btn-primary">Update</button>
+                                <button type="submit" class="btn btn-success">Confirm</button>
                             </form:form>
+
                         </div>
 
                     </div>
