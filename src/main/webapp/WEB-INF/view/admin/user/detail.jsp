@@ -10,7 +10,7 @@
                 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                 <meta name="description" content="Hỏi Dân IT - Dự án laptopshop" />
                 <meta name="author" content="Hỏi Dân IT" />
-                <title>Delete user - Hỏi Dân IT</title>
+                <title>Detail user - Hỏi Dân IT</title>
 
                 <link href="/css/styles.css" rel="stylesheet" />
                 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -30,29 +30,34 @@
                                 </ol>
                                 <div class="mt-5">
                                     <div class="row">
-                                        <div class="col-md-6 col-12 mx-auto">
+                                        <div class="col-12 mx-auto">
                                             <div class="d-flex justify-content-between">
-                                                <h3>Delete the user with id = ${id}</h3>
+                                                <h3>User Detail ${id}</h3>
+
+                                            </div>
+                                            <hr />
+                                            <div class="card" style="width: 60%;">
+                                                <div class="card-header">
+                                                    User information
+                                                </div>
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item">ID : ${id}</li>
+                                                    <li class="list-group-item">Email: ${user.email} </li>
+                                                    <li class="list-group-item">Full Name: ${user.fullName}</li>
+                                                    <li class="list-group-item">Address: ${user.address}</li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <a href="/admin/user" class="btn btn-primary mt-3">Back</a>
                                             </div>
 
-                                            <hr />
-                                            <div class="alert alert-warning" role="alert">
-                                                Are you sure to delete this user?
-                                            </div>
-                                            <form:form method="post" action="/admin/user/delete"
-                                                modelAttribute="newUser">
-                                                <div class="mb-3" style="display: none;">
-                                                    <label class=" form-label">Id:</label>
-                                                    <form:input type="text" class="form-control" path="id" value="${id}"
-                                                        readonly="true" />
-                                                </div>
-                                                <button type="submit" class="btn btn-success">Confirm</button>
-                                            </form:form>
+
+
+
+
 
                                         </div>
-
                                     </div>
-
                                 </div>
                             </div>
                         </main>
