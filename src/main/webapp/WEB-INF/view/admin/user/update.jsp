@@ -34,7 +34,7 @@
                                             <h3>Update</h3>
                                             <hr />
                                             <form:form method="post" action="/admin/user/update"
-                                                modelAttribute="newUser">
+                                                modelAttribute="newUser" class="row" enctype="multipart/form-data">
                                                 <div class="mb-3" style="display: none;">
                                                     <label class=" form-label">Id:</label>
                                                     <form:input type="text" class="form-control" path="id" value="${id}"
@@ -57,8 +57,18 @@
                                                     <label class="form-label">Address:</label>
                                                     <form:input type="text" class="form-control" path="address" />
                                                 </div>
+                                                <div class="mb-3 col-12 col-md-6">
+                                                    <label class="form-label">Role:</label>
+                                                    <form:select class="form-select" path="role.name">
+                                                        <form:option value="ADMIN">ADMIN</form:option>
+                                                        <form:option value="USER">USER</form:option>
+                                                    </form:select>
+                                                </div>
 
-                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                <div class="col-12 mb-5">
+                                                    <button type="submit" class="btn btn-primary">Update</button>
+                                                </div>
+
                                             </form:form>
                                         </div>
 

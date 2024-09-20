@@ -2,28 +2,33 @@ package vn.hoidanit.laptopshop.controller.admin;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import vn.hoidanit.laptopshop.domain.User;
-import vn.hoidanit.laptopshop.repository.UserRepository;
+import vn.hoidanit.laptopshop.service.UploadService;
 import vn.hoidanit.laptopshop.service.UserService;
 
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
+    private final UploadService uploadService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UploadService uploadService,
+            PasswordEncoder passwordEncoder) {
         this.userService = userService;
-
+        this.uploadService = uploadService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @RequestMapping("/")
@@ -35,7 +40,7 @@ public class UserController {
         return "hello";
     }
 
-    @RequestMapping("/admin/user/create")
+    @GetMapping("/admin/user/create")
     public String getCreateUserPage(Model model) {
         model.addAttribute("newUser", new User());
         return "admin/user/create";
@@ -75,6 +80,7 @@ public class UserController {
             user.setPhone(hoidanit.getPhone());
             user.setFullName(hoidanit.getFullName());
             user.setAddress(hoidanit.getAddress());
+            user.setRole(this.userService.getRoleByName(hoidanit.getRole().getName()));
             this.userService.handleSaveUser(user);
         }
         return "redirect:/admin/user";
@@ -95,10 +101,18 @@ public class UserController {
     }
 
     // Save new user
-    @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
-    public String requestMethodName(Model model, @ModelAttribute("newUser") User hoidanit) {
-        this.userService.handleSaveUser(hoidanit);
+    @PostMapping("/admin/user/create")
+    public String requestMethodName(Model model, @ModelAttribute("newUser") User hoidanit,
+            @RequestParam("hoidanitFile") MultipartFile file) {
 
+        // realtive path: absolute path
+        String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
+        String hasPassword = this.passwordEncoder.encode(hoidanit.getPassword());
+        hoidanit.setAvatar(avatar);
+        hoidanit.setPassword(hasPassword);
+
+        hoidanit.setRole(this.userService.getRoleByName(hoidanit.getRole().getName()));
+        this.userService.handleSaveUser(hoidanit);
         return "redirect:/admin/user";
     }
 
