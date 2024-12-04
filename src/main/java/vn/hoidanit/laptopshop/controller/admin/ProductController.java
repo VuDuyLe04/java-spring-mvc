@@ -52,10 +52,64 @@ public class ProductController {
     @RequestMapping("/admin/product/{id}")
     public String getProductDetailPage(Model model, @PathVariable long id) {
         Product product = this.productService.getProductById(id);
-        System.out.println("Check path id =" + id);
         model.addAttribute("id", id);
         model.addAttribute("product", product);
         return "admin/product/detail";
+    }
+    // Update product
+
+    @RequestMapping("/admin/product/update/{id}") // get
+    public String getUpdateProductPage(Model model, @PathVariable long id) {
+        Product product = this.productService.getProductById(id);
+        model.addAttribute("newProduct", product);
+        model.addAttribute("id", id);
+        return "admin/product/update";
+    }
+
+    @PostMapping("/admin/product/update")
+    public String handleUpdateProduct(@ModelAttribute("newProduct") @Valid Product pr,
+            BindingResult newProductBindingResult,
+            @RequestParam("hoidanitFile") MultipartFile file) {
+
+        // validate
+        if (newProductBindingResult.hasErrors()) {
+            return "admin/product/update";
+        }
+
+        Product currentProduct = this.productService.getProductById(pr.getId());
+        if (currentProduct != null) {
+            // update new image
+            if (!file.isEmpty()) {
+                String img = this.uploadService.handleSaveUploadFile(file, "product");
+                currentProduct.setImage(img);
+            }
+
+            currentProduct.setName(pr.getName());
+            currentProduct.setPrice(pr.getPrice());
+            currentProduct.setQuantity(pr.getQuantity());
+            currentProduct.setDetailDesc(pr.getDetailDesc());
+            currentProduct.setShortDesc(pr.getShortDesc());
+            currentProduct.setFactory(pr.getFactory());
+            currentProduct.setTarget(pr.getTarget());
+
+            this.productService.handleSaveProduct(currentProduct);
+        }
+
+        return "redirect:/admin/product";
+    }
+
+    // Delete
+    @GetMapping("/admin/product/delete/{id}") // get
+    public String getDeleteUserPage(Model model, @PathVariable long id) {
+        model.addAttribute("id", id);
+        model.addAttribute("newProduct", new Product());
+        return "admin/product/delete";
+    }
+
+    @PostMapping("/admin/product/delete") // get
+    public String postDeleteUser(Model model, @ModelAttribute("newProduct") Product product) {
+        this.productService.deleteProductById(product.getId());
+        return "redirect:/admin/product";
     }
 
     // Save new product
@@ -70,7 +124,7 @@ public class ProductController {
         }
 
         if (newProductbindingResult.hasErrors()) {
-            return "/admin/product/create";
+            return "admin/product/create";
         }
 
         // realtive path: absolute path

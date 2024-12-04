@@ -87,21 +87,9 @@ public class UserController {
             user.setRole(this.userService.getRoleByName(hoidanit.getRole().getName()));
             this.userService.handleSaveUser(user);
         }
-        return "redirect:/admin/user";
-    }
 
-    // Delete
-    @GetMapping("/admin/user/delete/{id}") // get
-    public String getDeleteUserPage(Model model, @PathVariable long id) {
-        model.addAttribute("id", id);
-        model.addAttribute("newUser", new User());
-        return "admin/user/delete";
-    }
-
-    @PostMapping("/admin/user/delete") // get
-    public String postDeleteUser(Model model, @ModelAttribute("newUser") User hoidanit) {
-        this.userService.deleteUserById(hoidanit.getId());
         return "redirect:/admin/user";
+
     }
 
     // Save new user
